@@ -1,0 +1,210 @@
+<div class="container">
+  <form autocomplete="off" (ngSubmit)="salvar()" [formGroup]="formulario">
+    <div class="grid">
+      <div class="col-12">
+        <h1>{{ editando ? "Edição de" : "Novo" }} Lançamento</h1>
+      </div>
+
+      <div class="col-6 md:col-3 p-fluid">
+        <label>Data</label>
+        <p-calendar
+          name="date"
+          dateFormat="dd/mm/yy"
+          [inline]="false"
+          [readonlyInput]="false"
+          [showIcon]="false"
+          name="date"
+          formControlName="date"
+          [showTime]="true"
+          [hourFormat]="'24'"
+          [showSeconds]="true"
+        >
+        </p-calendar>
+
+        <app-message
+          [control]="formulario.get('date')"
+          error="required"
+          text="Informe uma data"
+        ></app-message>
+      </div>
+
+      <div class="col-6 md:col-6 p-fluid">
+        <label>Tipo de Pagamento</label>
+        <input
+          pInputText
+          type="text"
+          name="paymentType"
+          formControlName="paymentType"
+        />
+
+        <app-message
+          [control]="formulario.get('paymentType')"
+          error="obrigatoriedade"
+          text="Informe um tipo de pagamento"
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('paymentType')"
+          error="tamanhoMinimo"
+          text="Mínimo de {{
+            formulario.get('paymentType')?.errors?.tamanhoMinimo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('paymentType')"
+          error="tamanhoMaximo"
+          text="Máximo de {{
+            formulario.get('paymentType')?.errors?.tamanhoMaximo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+      </div>
+
+      <div class="col-12 md:col-6 p-fluid">
+        <label>Bandeira do Cartão</label>
+        <input
+          pInputText
+          type="text"
+          name="cardBrand"
+          formControlName="cardBrand"
+        />
+
+        <app-message
+          [control]="formulario.get('cardBrand')"
+          error="obrigatoriedade"
+          text="Informe uma bandeira de cartão"
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('cardBrand')"
+          error="tamanhoMinimo"
+          text="Mínimo de {{
+            formulario.get('cardBrand')?.errors?.tamanhoMinimo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('cardBrand')"
+          error="tamanhoMaximo"
+          text="Máximo de {{
+            formulario.get('cardBrand')?.errors?.tamanhoMaximo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+      </div>
+
+      <div class="col-6 md:col-3 p-fluid">
+        <label>Valor Bruto</label>
+        <p-inputNumber
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          placeholder="0,00"
+          formControlName="grossAmount"
+          name="grossAmount"
+        ></p-inputNumber>
+        <app-message
+          [control]="formulario.get('grossAmount')"
+          error="obrigatoriedade"
+          text="Informe um valor"
+        >
+        </app-message>
+      </div>
+
+      <div class="col-6 md:col-3 p-fluid">
+        <label>Valor Líquido</label>
+        <p-inputNumber
+          mode="currency"
+          currency="BRL"
+          locale="pt-BR"
+          placeholder="0,00"
+          formControlName="netAmount"
+          name="netAmount"
+        ></p-inputNumber>
+        <app-message
+          [control]="formulario.get('netAmount')"
+          error="obrigatoriedade"
+          text="Informe um valor"
+        >
+        </app-message>
+      </div>
+
+      <div class="col-12 md:col-6 p-fluid">
+        <label>Canal</label>
+        <input
+          pInputText
+          type="text"
+          name="channel"
+          formControlName="channel"
+        />
+        <app-message
+          [control]="formulario.get('channel')"
+          error="obrigatoriedade"
+          text="Informe um canal"
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('channel')"
+          error="tamanhoMinimo"
+          text="Mínimo de {{
+            formulario.get('channel')?.errors?.tamanhoMinimo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('channel')"
+          error="tamanhoMaximo"
+          text="Máximo de {{
+            formulario.get('channel')?.errors?.tamanhoMaximo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+      </div>
+
+      <div class="col-12 md:col-6 p-fluid">
+        <label>Status</label>
+        <input pInputText type="text" name="status" formControlName="status" />
+        <app-message
+          [control]="formulario.get('status')"
+          error="obrigatoriedade"
+          text="Informe um status"
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('status')"
+          error="tamanhoMinimo"
+          text="Mínimo de {{
+            formulario.get('status')?.errors?.tamanhoMinimo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+        <app-message
+          [control]="formulario.get('status')"
+          error="tamanhoMaximo"
+          text="Máximo de {{
+            formulario.get('status')?.errors?.tamanhoMaximo?.tamanho
+          }} caracteres."
+        >
+        </app-message>
+      </div>
+
+      <div class="col-12">
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          [disabled]="formulario.invalid"
+        ></button>
+        <button
+          pButton
+          type="button"
+          label="Novo"
+          class="p-button-info"
+          (click)="novo()"
+        ></button>
+        <a routerLink="/cielo">Voltar para a pesquisa</a>
+      </div>
+    </div>
+  </form>
+</div>

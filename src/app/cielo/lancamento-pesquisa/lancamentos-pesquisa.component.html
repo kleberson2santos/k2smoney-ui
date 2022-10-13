@@ -1,0 +1,146 @@
+<div class="container">
+  <form autocomplete="off" (ngSubmit)="pesquisar()">
+    <div class="grid">
+      <div class="col-12">
+        <h1>Lançamentos</h1>
+      </div>
+
+      <div class="col-12 p-fluid">
+        <label>Bandeira</label>
+        <input
+          pInputText
+          type="text"
+          name="bandeira"
+          [(ngModel)]="filtro.bandeira"
+        />
+      </div>
+
+      <div class="col-12">
+        <label style="display: block">Data</label>
+
+        <p-calendar
+          [inline]="false"
+          [readonlyInput]="false"
+          [showIcon]="false"
+          name="dataInicio"
+          [showTime]="true"
+          [hourFormat]="'24'"
+          [showSeconds]="true"
+          [(ngModel)]="filtro.dataInicio"
+        >
+        </p-calendar>
+
+        <label class="label">até</label>
+        <p-calendar
+          [inline]="false"
+          [readonlyInput]="false"
+          [showIcon]="false"
+          name="dataFim"
+          [showTime]="true"
+          [hourFormat]="'24'"
+          [showSeconds]="true"
+          [(ngModel)]="filtro.dataFim"
+        >
+        </p-calendar>
+      </div>
+
+      <div class="col-12">
+        <button pButton type="submit" label="Pesquisar"></button>
+      </div>
+    </div>
+  </form>
+
+  <div class="grid">
+    <div class="col-12">
+      <p-table
+        [value]="lancamentos"
+        [responsive]="true"
+        [paginator]="true"
+        [rows]="filtro.itensPorPagina"
+        [lazy]="true"
+        [totalRecords]="totalRegistros"
+        (onLazyLoad)="aoMudarPagina($event)"
+        #tabela
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Bandeira</th>
+            <th>Tipo de Pagamento</th>
+            <th>Canal</th>
+            <th class="col-data-header">Data</th>
+            <th class="col-data-header">Status</th>
+            <th class="col-valor-header">Valor Bruto</th>
+            <th class="col-valor-header">Valor Líquido</th>
+            <th class="col-acoes"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-lancamento>
+          <tr>
+            <td>
+              <span class="p-column-title">Bandeira</span>
+              {{ lancamento.cardBrand }}
+            </td>
+
+            <td>
+              <span class="p-column-title">Tipo de Pagamento</span>
+              {{ lancamento.paymentType }}
+            </td>
+
+            <td>
+              <span class="p-column-title">Canal</span>
+              {{ lancamento.channel }}
+            </td>
+
+            <td class="col-data">
+              <span class="p-column-title">Data</span>
+              {{ lancamento.date | date: "dd/MM/yyyy HH:mm" }}
+            </td>
+
+            <td class="col-data">
+              <span class="p-column-title">Status</span>
+              {{ lancamento.status }}
+            </td>
+
+            <td class="col-valor">
+              <span class="p-column-title">Valor Bruto</span>
+              <span [style.color]="'blue'">
+                {{ lancamento.grossAmount | number: "1.2-2":"pt-BR" }}
+              </span>
+            </td>
+            <td class="col-valor">
+              <span class="p-column-title">Valor Líquido</span>
+              <span [style.color]="'blue'">
+                {{ lancamento.netAmount | number: "1.2-2":"pt-BR" }}
+              </span>
+            </td>
+
+            <td class="col-acoes">
+              <a
+                pButton
+                icon="pi pi-pencil"
+                pTooltip="Editar"
+                tooltipPosition="top"
+                [routerLink]="['/cielo', lancamento.id]"
+              ></a>
+              <button
+                pButton
+                icon="pi pi-trash"
+                pTooltip="Excluir"
+                tooltipPosition="top"
+                (click)="confirmarExclusao(lancamento)"
+                [disabled]="naoTemPermissao('ROLE_REMOVER_LANCAMENTO')"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6">Nenhum lançamento encontrado</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <a pButton label="Novo Lançamento" routerLink="/cielo/novo"></a>
+</div>
